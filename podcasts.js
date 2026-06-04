@@ -57,7 +57,7 @@ const PODCASTS = [
     duration: "38:45",
     date: "۱۴۰۳/۰۳/۰۱",
     episode: 1,
-    telegramLink: "https://t.me/your_channel/2", // ← لینک فایل از تلگرام
+    telegramLink: "https://s5.uupload.ir/files/arshiv/25ماه%20رمضان%201447.mp3", // ← لینک فایل از تلگرام
     tags: ["هوش مصنوعی", "تکنولوژی", "مبتدی"],
   },
   {
