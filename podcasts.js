@@ -17,11 +17,13 @@ const PODCAST_CONFIG = {
 //  دسته‌بندی‌ها
 // =====================================================
 const CATEGORIES = [
-  { id: "all", label: "همه", icon: "🎙️" },
-  { id: "tech", label: "تکنولوژی", icon: "💻" },
-  { id: "business", label: "کسب‌وکار", icon: "💼" },
-  { id: "science", label: "علم", icon: "🔬" },
-  { id: "personal", label: "رشد فردی", icon: "🌱" },
+const CATEGORIES = [
+  { id: "all",     label: "همه",         icon: "🎙️" },
+  { id: "sheikh",  label: "شیخ مرحوم",   icon: "📖" },
+  { id: "seyyed",  label: "سید مرحوم",   icon: "📖" },
+  { id: "karim",    label: "آقای مرحوم",  icon: "📖" },
+  { id: "sharif",  label: "آقای شریف",   icon: "📖" },
+  { id: "sarvar",  label: "سرور معظم",   icon: "📖" },
 ];
 
 // =====================================================
