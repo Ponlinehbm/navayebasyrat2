@@ -17,7 +17,6 @@ const PODCAST_CONFIG = {
 //  دسته‌بندی‌ها
 // =====================================================
 const CATEGORIES = [
-const CATEGORIES = [
   { id: "all",     label: "همه",         icon: "🎙️" },
   { id: "sheikh",  label: "شیخ مرحوم",   icon: "📖" },
   { id: "seyyed",  label: "سید مرحوم",   icon: "📖" },
