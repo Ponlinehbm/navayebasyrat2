@@ -67,7 +67,6 @@ const BOOKS = [
 ];
 
 const PODCASTS = [
- = [
   { id: 1, bookId: "book1", episode: 1, title: "قسمت اول: معرفی", duration: "10:00", audioUrl: "..." },
   { id: 2, bookId: "book1", episode: 2, title: "قسمت دوم: فصل اول", duration: "25:30", audioUrl: "..." },
   { id: 3, bookId: "book2", episode: 1, title: "قسمت اول: شروع", duration: "15:00", audioUrl: "..." }
