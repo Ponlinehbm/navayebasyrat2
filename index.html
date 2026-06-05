@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a0f" />
+  <title>کتاب‌خانه صوتی</title>
+
+  <!-- تلگرام WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <!-- استایل اصلی -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ── لودر اولیه ── -->
+  <div id="app-loader">
+    <div class="loader-icon">🎧</div>
+    <div class="loader-text">در حال بارگذاری کتابخانه...</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       هدر ثابت بالای صفحه
+  ══════════════════════════════════════════ -->
+  <header class="app-header">
+    <div class="header-top">
+      <div class="app-logo">
+        <div class="logo-icon">🎧</div>
+        <div>
+          <div class="logo-text">کتابخانه صوتی</div>
+          <div class="logo-sub">پادکست کتاب</div>
+        </div>
+      </div>
+      <div class="header-stats">
+        <div class="stat-item">
+          <div class="stat-num" id="total-books">0</div>
+          <div class="stat-lbl">کتاب</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="total-episodes">0</div>
+          <div class="stat-lbl">اپیزود</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- جعبه جستجو -->
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input
+        id="search-input"
+        class="search-input"
+        type="search"
+        placeholder="جستجوی کتاب یا نویسنده..."
+        autocomplete="off"
+      />
+    </div>
+
+    <!-- فیلتر دسته‌بندی -->
+    <div class="filter-bar" id="filter-bar"></div>
+  </header>
+
+  <!-- ══════════════════════════════════════════
+       صفحه اصلی — لیست کتاب‌ها
+  ══════════════════════════════════════════ -->
+  <main class="main-content">
+
+    <!-- ── نمای خانه ── -->
+    <div id="home-view">
+      <!-- بنر بالا -->
+      <div class="hero-banner">
+        <span class="hero-emoji">📚</span>
+        <div class="hero-title">خوش آمدید!</div>
+        <div class="hero-sub">کتاب مورد علاقه‌تان را انتخاب کنید و لذت ببرید</div>
+      </div>
+
+      <!-- بخش کتاب‌ها -->
+      <div class="section-header">
+        <div class="section-title">
+          📖 کتاب‌ها
+        </div>
+      </div>
+      <div class="books-grid" id="books-grid"></div>
+    </div>
+
+    <!-- ── نمای کتاب ── -->
+    <div id="book-view" style="display:none;">
+      <!-- دکمه بازگشت -->
+      <button class="back-btn" id="back-btn">
+        ← بازگشت به کتابخانه
+      </button>
+
+      <!-- اطلاعات کتاب -->
+      <div class="book-hero">
+        <span class="book-hero-emoji" id="book-hero-emoji">📗</span>
+        <div class="book-hero-title" id="book-hero-title"></div>
+        <div class="book-hero-author" id="book-hero-author"></div>
+        <div class="book-hero-desc" id="book-hero-desc"></div>
+        <div class="book-hero-stats">
+          <div class="hero-stat">
+            <strong id="book-ep-count">0</strong>
+            <span> اپیزود</span>
+          </div>
+          <div class="hero-stat">
+            <strong id="book-category-badge"></strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- لیست اپیزودها -->
+      <div class="section-header">
+        <div class="section-title">🎙 اپیزودها</div>
+      </div>
+      <div class="episodes-list" id="episodes-list"></div>
+    </div>
+
+  </main>
+
+  <!-- ══════════════════════════════════════════
+       پلیر پایین صفحه (اسپاتیفای‌مانند)
+  ══════════════════════════════════════════ -->
+  <div class="player-bar" id="player-bar">
+    <!-- دستگیره گسترش -->
+    <div class="expand-handle" id="expand-handle"></div>
+
+    <!-- پلیر کوچک -->
+    <div class="player-mini" id="player-mini">
+      <div class="player-mini-info">
+        <div class="player-mini-title" id="mini-title">انتخاب کنید...</div>
+        <div class="player-mini-book"  id="mini-book"></div>
+      </div>
+      <div class="player-mini-controls">
+        <button class="ctrl-btn" id="prev-btn" title="قبلی">⏮</button>
+        <button class="ctrl-btn primary" id="mini-play-btn">▶</button>
+        <button class="ctrl-btn" id="next-btn" title="بعدی">⏭</button>
+      </div>
+    </div>
+
+    <!-- پلیر گسترده -->
+    <div class="player-full" id="player-full">
+      <!-- نوار پیشرفت -->
+      <div class="progress-area">
+        <div class="progress-bar-wrap" id="progress-bar-wrap">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-times">
+          <span id="time-current">0:00</span>
+          <span id="time-total">0:00</span>
+        </div>
+      </div>
+
+      <!-- کنترل‌های کامل -->
+      <div class="full-controls">
+        <button class="ctrl-btn" id="seek-back-btn" title="۱۵ ثانیه عقب">⏪</button>
+        <button class="ctrl-btn" id="prev-btn-full" title="اپیزود قبلی">⏮</button>
+        <button class="ctrl-btn primary" id="full-play-btn">▶</button>
+        <button class="ctrl-btn" id="next-btn-full" title="اپیزود بعدی">⏭</button>
+        <button class="ctrl-btn" id="seek-fwd-btn" title="۱۵ ثانیه جلو">⏩</button>
+      </div>
+
+      <!-- سرعت پخش -->
+      <div style="text-align:center; margin-top:12px;">
+        <button class="speed-btn" id="speed-btn">1×</button>
+      </div>
+
+      <!-- باز کردن در تلگرام -->
+      <button class="tg-open-btn" id="tg-open-btn">
+        🔗 شنیدن در تلگرام
+      </button>
+    </div>
+  </div>
+
+  <!-- ── داده‌ها ── -->
+  <script src="data/catalog.js"></script>
+  <!-- ── منطق اصلی ── -->
+  <script src="js/app.js"></script>
+</body>
+</html>
