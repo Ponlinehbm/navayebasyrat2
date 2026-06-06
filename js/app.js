@@ -467,14 +467,18 @@ function init() {
   });
 
   // حذف لودر
+  document.getElementById('author-filter').addEventListener('change', (e) => {
+    State.filter.author = e.target.value;
+    renderHome();
+});
   setTimeout(() => {
     const loader = document.getElementById('app-loader');
     if (loader) loader.style.opacity = '0';
     setTimeout(() => loader?.remove(), 300);
   }, 600);
 }
-
-document.getElementById('author-filter').addEventListener('change', (e) => {
-    State.filter.author = e.target.value;
-    renderHome();
+document.addEventListener("DOMContentLoaded", function() {
+    init();
 });
+
+
