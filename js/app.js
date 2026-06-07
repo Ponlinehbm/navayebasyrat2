@@ -32,8 +32,6 @@ function bookEmoji(id) {
 
 /* ── رندر صفحه اصلی ── */
 function renderHome() {
-  const { category, query } = State.filter;
-
     const books = CATALOG.filter(b => {
         const matchCat = State.filter.category === 'همه' || b.category === State.filter.category;
         const matchAuthor = State.filter.author === 'همه' || b.author === State.filter.author;
@@ -376,32 +374,9 @@ function onProgressClick(e) {
   State.audio.currentTime = pct * State.player.duration;
 }
 
-/* ── فیلترهای دسته‌بندی ── */
+/* ── فیلترهای دسته‌بندی موضوعی ── */
 function setupFilters() {
   const bar = document.getElementById('filter-bar');
-    const authorBar = document.getElementById('author-bar');
-    if (!authorBar) return;
-
-    // استخراج لیست گویندگان یکتا از کاتالوگ
-    const authors = ['همه', ...new Set(CATALOG.map(b => b.author))];
-
-    // ساخت دکمه‌ها (مشابه کلاس‌های فیلتر موضوعی)
-    authorBar.innerHTML = authors.map(author => `
-        <button class="filter-btn ${State.filter.author === author ? 'active' : ''}" 
-                data-author="${author}">
-            ${author}
-        </button>
-    `).join('');
-
-    // مدیریت کلیک روی دکمه‌ها
-    authorBar.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            authorBar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            e.target.classList.add('active');
-            State.filter.author = e.target.dataset.author;
-            renderHome();
-        });
-    });
   bar.innerHTML = '';
   CATEGORIES.forEach(cat => {
     const chip = document.createElement('button');
@@ -409,11 +384,34 @@ function setupFilters() {
     chip.textContent = cat;
     chip.addEventListener('click', () => {
       State.filter.category = cat;
-      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('#filter-bar .filter-chip').forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
       renderHome();
     });
     bar.appendChild(chip);
+  });
+}
+
+/* ── فیلترهای نویسندگان (مانند دسته‌بندی موضوعی) ── */
+function setupAuthorFilters() {
+  const authorBar = document.getElementById('author-bar');
+  if (!authorBar) return;
+
+  const authors = ['همه', ...new Set(CATALOG.map(b => b.author))];
+
+  authorBar.innerHTML = '';
+  authors.forEach(author => {
+    const chip = document.createElement('button');
+    chip.className = 'filter-chip' + (author === State.filter.author ? ' active' : '');
+    chip.textContent = author;
+    chip.dataset.author = author;
+    chip.addEventListener('click', () => {
+      State.filter.author = author;
+      authorBar.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+      chip.classList.add('active');
+      renderHome();
+    });
+    authorBar.appendChild(chip);
   });
 }
 
@@ -467,10 +465,6 @@ function init() {
   });
 
   // حذف لودر
-  document.getElementById('author-filter').addEventListener('change', (e) => {
-    State.filter.author = e.target.value;
-    renderHome();
-});
   setTimeout(() => {
     const loader = document.getElementById('app-loader');
     if (loader) loader.style.opacity = '0';
