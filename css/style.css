@@ -412,3 +412,4 @@ body {
 @media (min-width: 400px) {
   .books-grid { grid-template-columns: repeat(2, 1fr); }
 }
+

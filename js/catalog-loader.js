@@ -38,3 +38,4 @@
     console.warn('[catalog-loader] ⚠️ خطا در بارگذاری از localStorage:', e);
   }
 })();
+

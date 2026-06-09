@@ -122,3 +122,4 @@ const CATALOG = [
 
 // دسته‌بندی‌های موجود
 const CATEGORIES = ["همه", ...new Set(CATALOG.map(b => b.category))];
+
