@@ -620,14 +620,15 @@
         <div class="alert alert-error" id="ep-alert-error">❌ لطفاً فیلدهای ستاره‌دار را پر کنید.</div>
 
 
-        <div style="background:rgba(124,106,255,0.07);border:1px solid rgba(124,106,255,0.25);border-radius:var(--radius-md);padding:14px 18px;margin-bottom:20px;font-size:0.82rem;line-height:1.8;color:var(--text-secondary);">
-          <div style="font-weight:700;color:var(--accent-soft);margin-bottom:6px;">📌 نحوه ذخیره اطلاعات</div>
-          اطلاعات وارد‌شده در <b style="color:var(--text-primary);">مرورگر (localStorage)</b> ذخیره می‌شود.
-          برای اعمال تغییرات روی سایت، باید فایل <code style="background:rgba(255,255,255,0.08);padding:1px 6px;border-radius:4px;">catalog.js</code> را دانلود و جایگزین کنید:
+        <div style="background:rgba(62,207,142,0.07);border:1px solid rgba(62,207,142,0.3);border-radius:var(--radius-md);padding:14px 18px;margin-bottom:20px;font-size:0.82rem;line-height:1.8;color:var(--text-secondary);">
+          <div style="font-weight:700;color:var(--success);margin-bottom:6px;">✅ به‌روزرسانی خودکار فعال است</div>
+          اطلاعات در <b style="color:var(--text-primary);">مرورگر (localStorage)</b> ذخیره می‌شود و <b style="color:var(--text-primary);">بلافاصله</b> در سایت اعمال می‌گردد.
           <div style="margin-top:8px;display:flex;gap:10px;flex-wrap:wrap;">
-            <span style="background:rgba(124,106,255,0.1);border:1px solid rgba(124,106,255,0.2);border-radius:20px;padding:2px 12px;">۱. اپیزود را اضافه کنید</span>
-            <span style="background:rgba(124,106,255,0.1);border:1px solid rgba(124,106,255,0.2);border-radius:20px;padding:2px 12px;">۲. دکمه «⬇️ دانلود catalog.js» بالای صفحه را بزنید</span>
-            <span style="background:rgba(124,106,255,0.1);border:1px solid rgba(124,106,255,0.2);border-radius:20px;padding:2px 12px;">۳. فایل را جایگزین <code>data/catalog.js</code> کنید</span>
+            <span style="background:rgba(62,207,142,0.1);border:1px solid rgba(62,207,142,0.2);border-radius:20px;padding:2px 12px;">۱. اپیزود را اضافه کنید</span>
+            <span style="background:rgba(62,207,142,0.1);border:1px solid rgba(62,207,142,0.2);border-radius:20px;padding:2px 12px;">۲. صفحه سایت را رفرش کنید — همین!</span>
+          </div>
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(62,207,142,0.15);font-size:0.77rem;color:var(--text-muted);">
+            ⚠️ برای استفاده در مرورگر یا دستگاه دیگر، همچنان می‌توانید از دکمه «⬇️ دانلود catalog.js» بالای صفحه استفاده کنید.
           </div>
         </div>
         <!-- انتخاب کتاب -->
@@ -950,11 +951,18 @@ function loadCatalog() {
 function saveCatalog() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(workingCatalog));
-    // نمایش badge تغییرات ذخیره‌نشده
+    // نمایش badge تغییرات اعمال‌شده
     const badge = document.getElementById('unsaved-badge');
-    if (badge) badge.style.display = 'inline';
+    if (badge) {
+      badge.style.display = 'inline';
+      badge.style.background = 'rgba(62,207,142,0.15)';
+      badge.style.borderColor = 'rgba(62,207,142,0.4)';
+      badge.style.color = 'var(--success)';
+      badge.textContent = '✅ ذخیره شد — رفرش سایت کافی است';
+      setTimeout(() => { badge.style.display = 'none'; }, 4000);
+    }
     const btn = document.getElementById('quick-dl-btn');
-    if (btn) btn.style.boxShadow = '0 0 0 2px rgba(240,192,64,0.5)';
+    if (btn) btn.style.boxShadow = '';
   } catch(e) {
     alert('خطا در ذخیره‌سازی: ' + e.message);
   }
@@ -968,11 +976,6 @@ function quickDownload() {
   a.download = 'catalog.js';
   a.click();
   URL.revokeObjectURL(a.href);
-  // پاک کردن badge بعد از دانلود
-  const badge = document.getElementById('unsaved-badge');
-  if (badge) badge.style.display = 'none';
-  const btn = document.getElementById('quick-dl-btn');
-  if (btn) btn.style.boxShadow = '';
   // نمایش راهنما
   showDownloadGuide();
 }
@@ -987,15 +990,19 @@ function showDownloadGuide() {
     background:var(--bg-elevated);border:1px solid var(--success);
     border-radius:var(--radius-md);padding:16px 24px;z-index:9999;
     font-size:0.85rem;color:var(--text-primary);box-shadow:0 8px 32px rgba(0,0,0,0.4);
-    max-width:420px;text-align:center;line-height:1.7;
+    max-width:440px;text-align:center;line-height:1.7;
   `;
   toast.innerHTML = `
     <div style="font-weight:700;color:var(--success);margin-bottom:6px;">✅ catalog.js دانلود شد</div>
-    <div style="color:var(--text-secondary);">فایل دانلود‌شده را جایگزین<br><code style="background:rgba(255,255,255,0.1);padding:1px 6px;border-radius:4px;">data/catalog.js</code><br>در پوشه پروژه کنید.</div>
+    <div style="color:var(--text-secondary);">
+      برای استفاده در این مرورگر، فایلی نیاز نیست — تغییرات خودکار اعمال می‌شوند.<br>
+      این فایل برای انتقال به دستگاه/سرور دیگر استفاده کنید.<br>
+      آن را جایگزین <code style="background:rgba(255,255,255,0.1);padding:1px 6px;border-radius:4px;">data/catalog.js</code> کنید.
+    </div>
     <button onclick="this.parentElement.remove()" style="margin-top:10px;background:transparent;border:1px solid var(--border-bright);color:var(--text-muted);border-radius:6px;padding:4px 14px;cursor:pointer;font-size:0.78rem;">بستن</button>
   `;
   document.body.appendChild(toast);
-  setTimeout(() => toast?.remove(), 8000);
+  setTimeout(() => toast?.remove(), 10000);
 }
 
 let workingCatalog = loadCatalog();
